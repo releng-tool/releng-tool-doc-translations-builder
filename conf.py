@@ -40,6 +40,7 @@ locale_dirs = [os.environ['RELENG_LOCALE_DIR']]
 gettext_compact = False
 
 # overrides
+html_theme_options['canonical_url'] = 'https://docs.releng.io/'
 html_show_copyright = False
 html_show_sphinx = True
 

@@ -1,0 +1,20 @@
+<div class="rst-versions" data-toggle="rst-versions">
+<span class="rst-current-version" data-toggle="rst-current-version">
+  <span class="icon icon-book"></span>
+  {{ version }}
+  <span class="icon icon-caret-down"></span>
+</span>
+<div class="rst-other-versions">
+  <dl>
+    <dt>Languages</dt>
+    {% for val in languages %}
+      <dd><a href="https://docs.releng.io/{{ val }}/master/">{{ val }}</a></dd>
+    {% endfor %}
+  </dl>
+  <dl>
+    <dt>Versions</dt>
+    {% for val in versions %}
+      <dd><a href="https://docs.releng.io/{{ language }}/{{ val }}/">{{ val }}</a></dd>
+    {% endfor %}
+  </dl>
+</div>

@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Copyright 2019 releng-tool
+set -e
+
+base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $base/common
+source $base/$locale_container/settings
+out_dir=$base/_build
+
+for version in "${!versions[@]}"; do
+    reference=${versions[$version]}
+
+    # compile a list of supported languages for this version
+    languages=('en')
+    for ref in $(ls -d $base/$locale_container/locale-$version/*/); do
+        lang_dir=${ref%%/}
+        lang=${lang_dir##*/}
+
+        # skip pot directory
+        if [[ "$lang" == 'pot' ]]; then
+            continue
+        fi
+
+        languages+=($lang)
+    done
+
+    # compile a list of languages
+    lang_list=$(printf ",%s" "${languages[@]}")
+    lang_list=${lang_list:1}
+
+    for lang in "${languages[@]}"; do
+        target_dir=$out_dir/$lang/$version
+        echo -e "\e[7mbuilding $version ($lang)...\e[0m"
+
+        # checkout specific documentation version
+        git \
+            --git-dir="$base/$doc_container/.git" \
+            --work-tree="$base/$doc_container" \
+            checkout $reference --force
+
+        # build documentation
+        export RELENG_LANGUAGES=$lang_list
+        export RELENG_LOCALE_DIR=$base/$locale_container/locale-$version/
+        export RELENG_VERSION=$version
+        export RELENG_VERSIONS=$ordered_versions
+        sphinx-build \
+            -Dlanguage=$lang \
+            -b $builder \
+            $base \
+            $target_dir
+    done
+done

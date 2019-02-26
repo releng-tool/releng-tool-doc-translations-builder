@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Copyright 2019 releng-tool
+set -e
+
+################################################################################
+
+# documentation repository
+doc_repo=https://github.com/releng-tool/releng-tool.git
+
+# repository with locale information
+locale_repo=https://github.com/releng-tool/releng-tool-doc-translations.git
+
+################################################################################
+
+base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $base/common
+
+# clone repositories
+echo 'ensuring repositories exists...'
+[ ! -d "$base/$doc_container" ] && git \
+    clone $doc_repo $base/$doc_container
+[ ! -d "$base/$locale_container" ] && \
+    git clone $locale_repo $base/$locale_container
+
+# fetch all from repositories
+echo 'ensuring most recent data from repositories...'
+git --git-dir="$base/$doc_container/.git" fetch --all
+git --git-dir="$base/$locale_container/.git" fetch --all
+
+# disable detached head message
+git --git-dir="$base/$doc_container/.git" config advice.detachedHead false
+git --git-dir="$base/$locale_container/.git" config advice.detachedHead false
+
+echo 'ready!'

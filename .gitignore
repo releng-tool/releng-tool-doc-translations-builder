@@ -1,0 +1,6 @@
+# built documentation
+_build/*
+
+# external repositories
+releng-tool/
+translations/

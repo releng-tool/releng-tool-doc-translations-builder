@@ -1,10 +1,29 @@
 #!/usr/bin/env bash
 # Copyright 2019 releng-tool
+
+while [ "$#" -gt 0 ]; do
+    case $1 in
+        -L|--locale)
+        locale_dir="$2"
+        shift
+        ;;
+    esac
+    shift
+done
+
+# find absolute path to locale directory (if provided and exists)
+if [ -n "$locale_dir" ]; then
+    echo "$(cd "$(dirname "$locale_dir")"; pwd -P)/$(basename "$locale_dir")"
+fi
+
 set -e
 
 base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source $base/common
-source $base/$locale_container/settings
+if [ -z "$locale_dir" ]; then
+    locale_dir=$base/$locale_container
+fi
+source $locale_dir/settings
 out_dir=$base/_build
 
 for version in "${!versions[@]}"; do
@@ -12,7 +31,7 @@ for version in "${!versions[@]}"; do
 
     # compile a list of supported languages for this version
     languages=('en')
-    for ref in $(ls -d $base/$locale_container/locale-$version/*/); do
+    for ref in $(ls -d $locale_dir/locale-$version/*/); do
         lang_dir=${ref%%/}
         lang=${lang_dir##*/}
 
@@ -40,7 +59,7 @@ for version in "${!versions[@]}"; do
 
         # build documentation
         export RELENG_LANGUAGES=$lang_list
-        export RELENG_LOCALE_DIR=$base/$locale_container/locale-$version/
+        export RELENG_LOCALE_DIR=$locale_dir/locale-$version/
         export RELENG_VERSION=$version
         export RELENG_VERSIONS=$ordered_versions
         sphinx-build \

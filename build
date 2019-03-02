@@ -26,6 +26,9 @@ fi
 source $locale_dir/settings
 out_dir=$base/_build
 
+# ensure translations are up-to-date
+$base/support --generate-translation-objects
+
 for version in "${!versions[@]}"; do
     reference=${versions[$version]}
 

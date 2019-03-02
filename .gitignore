@@ -7,3 +7,8 @@ translations/
 
 # gettext generated mo files
 locale**/**/*.mo
+
+# python-specific
+__pycache__/
+*.py[cod]
+*$py.class

@@ -4,3 +4,6 @@ _build/*
 # external repositories
 releng-tool/
 translations/
+
+# gettext generated mo files
+locale**/**/*.mo

@@ -42,16 +42,19 @@ if 'RELENG_LANGUAGES' not in os.environ:
     raise SyntaxError('supported languages not provided')
 html_context['languages'] = os.environ['RELENG_LANGUAGES'].split(',')
 
-stable_text = 'stable v{}'.format(most_stable_version)
+sys.path.insert(0, base_dir)
+from messages import *
+
+stable_text = STABLE_MSG.format(most_stable_version)
 stable_data = '<a href="https://docs.releng.io/{}/{}/">{}</a>'.format(
     language,
     most_stable_version,
     stable_text
     )
 if version == 'master':
-    html_context['version_warning'] = 'development version | ' + stable_data
+    html_context['version_warning'] = DEVELOPMENT_MSG + ' | ' + stable_data
 elif version != most_stable_version:
-    html_context['version_warning'] = 'legacy version | ' + stable_data
+    html_context['version_warning'] = LEGACY_MSG + ' | ' + stable_data
 
 # localization options
 if 'RELENG_LOCALE_DIR' not in os.environ:

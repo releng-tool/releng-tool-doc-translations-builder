@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# Copyright 2019 releng-tool
+set -e
+
+base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+while [ "$#" -gt 0 ]; do
+    case $1 in
+        --update)
+        opt=1
+        ;;
+        --generate-translation-objects|-G)
+        opt=2
+        ;;
+        --help|-h)
+cat <<EOT
+support options)
+
+    -G, --generate-translation-objects  generate translation objects (mo)
+    -h, --help                          show this help
+    --update                            updating existing translation assets
+EOT
+        exit 0
+        ;;
+    esac
+    shift
+done
+
+if [ -z "$opt" ]; then
+    echo 'Choose an option:'
+    echo ''
+
+    while true; do
+        echo ' 1) Update Assets'
+        echo ' 2) Generate Translation Objects'
+        echo ' 3) Add Language'
+        echo ' q) Quit'
+
+        read opt
+        case $opt in
+            1) break;;
+            2) break;;
+            3) break;;
+        [Qq]*) exit 0;;
+            *) echo 'Unknown option provided.\n';;
+        esac
+    done
+fi
+
+case $opt in
+1)
+    echo 'updating pot...'
+    mkdir -p $base/locale/pot
+    xgettext \
+        --keyword=_ \
+        --language=Python \
+        --omit-header \
+        --sort-output \
+        -o $base/locale/pot/messages.pot messages.py
+
+    for ref in $(ls -d $base/locale/*/); do
+        lang_dir=${ref%%/}
+        lang=${lang_dir##*/}
+
+        # skip pot directory
+        if [[ "$lang" == 'pot' ]]; then
+            continue
+        fi
+
+        # update language files
+        echo "updating $lang..."
+        msgmerge \
+            --update \
+            $base/locale/$lang/LC_MESSAGES/messages.po \
+            locale/pot/messages.pot
+    done
+    ;;
+2)
+    for ref in $(ls -d $base/locale/*/); do
+        lang_dir=${ref%%/}
+        lang=${lang_dir##*/}
+
+        # skip pot directory
+        if [[ "$lang" == 'pot' ]]; then
+            continue
+        fi
+
+        # building language files
+        echo "building $lang..."
+        msgfmt \
+            $base/locale/$lang/LC_MESSAGES/messages.po \
+            --output-file=$base/locale/$lang/LC_MESSAGES/messages.mo
+    done
+    ;;
+3)
+    read -p 'Enter language to add: ' lang
+    lang="${lang#"${lang%%[![:space:]]*}"}"
+    lang="${lang%"${lang##*[![:space:]]}"}"
+    if [ -z "$lang" ]; then
+        exit 0
+    fi
+
+    mkdir -p $base/locale/$lang/LC_MESSAGES
+    msginit \
+        --locale=$lang \
+        --no-translator \
+        --output-file=$base/locale/$lang/LC_MESSAGES/messages.po \
+        --input=locale/pot/messages.pot
+    ;;
+esac

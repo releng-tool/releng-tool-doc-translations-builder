@@ -6,6 +6,12 @@ from sphinx.util.pycompat import execfile_
 import os
 import sys
 
+# ##############################################################################
+
+most_stable_version = '0.1'
+
+# ##############################################################################
+
 base_dir = os.path.dirname(os.path.abspath(__file__))
 releng_tool_dir = os.path.join(base_dir, 'releng-tool')
 releng_tool_doc_dir = os.path.join(releng_tool_dir, 'Documentation')
@@ -28,9 +34,24 @@ if 'RELENG_VERSIONS' not in os.environ:
     raise SyntaxError('supported versions not provided')
 html_context['versions'] = os.environ['RELENG_VERSIONS'].split(',')
 
+if 'RELENG_LANGUAGE' not in os.environ:
+    raise SyntaxError('language not provided')
+language = os.environ['RELENG_LANGUAGE']
+
 if 'RELENG_LANGUAGES' not in os.environ:
     raise SyntaxError('supported languages not provided')
 html_context['languages'] = os.environ['RELENG_LANGUAGES'].split(',')
+
+stable_text = 'stable v{}'.format(most_stable_version)
+stable_data = '<a href="https://docs.releng.io/{}/{}/">{}</a>'.format(
+    language,
+    most_stable_version,
+    stable_text
+    )
+if version == 'master':
+    html_context['version_warning'] = 'development version | ' + stable_data
+elif version != most_stable_version:
+    html_context['version_warning'] = 'legacy version | ' + stable_data
 
 # localization options
 if 'RELENG_LOCALE_DIR' not in os.environ:

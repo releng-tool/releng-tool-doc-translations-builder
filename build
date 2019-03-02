@@ -58,6 +58,7 @@ for version in "${!versions[@]}"; do
             checkout $reference --force
 
         # build documentation
+        export RELENG_LANGUAGE=$lang
         export RELENG_LANGUAGES=$lang_list
         export RELENG_LOCALE_DIR=$locale_dir/locale-$version/
         export RELENG_VERSION=$version

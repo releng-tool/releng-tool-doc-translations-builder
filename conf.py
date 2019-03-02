@@ -23,7 +23,10 @@ sys.path.insert(0, releng_tool_dir)
 execfile_(os.path.join(releng_tool_doc_dir, 'conf.py'), globals())
 
 # theme overrides
-templates_path = [os.path.join(base_dir, '_templates/')]
+templates_path = [
+    os.path.join(releng_tool_doc_dir, '_templates/'),
+    os.path.join(base_dir, '_templates/'),
+]
 
 # version/language information
 if 'RELENG_VERSION' not in os.environ:

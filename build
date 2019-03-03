@@ -25,6 +25,7 @@ out_dir=$base/_build
 
 # cleanup legacy working directory
 rm -rf $base/$workdir
+rm -rf $out_dir
 
 if [ -z "$locale_dir" ]; then
     locale_dir=$base/$workdir/$locale_container

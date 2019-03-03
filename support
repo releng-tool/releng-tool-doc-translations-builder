@@ -106,5 +106,7 @@ case $opt in
         --no-translator \
         --output-file=$base/locale/$lang/LC_MESSAGES/messages.po \
         --input=locale/pot/messages.pot
+    sed -i 's/"Content-Type:.*/"Content-Type: text\/plain; charset=UTF-8\\n"/g' \
+        $base/locale/$lang/LC_MESSAGES/messages.po
     ;;
 esac

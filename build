@@ -30,12 +30,21 @@ out_dir=$base/_build
 # ensure translations are up-to-date
 $base/support --generate-translation-objects
 
+# include a "latest" version pointing to most_stable_version
+versions+=(['latest']=${versions[$most_stable_version]})
+ordered_versions="latest,$ordered_versions"
+
 for version in "${!versions[@]}"; do
     reference=${versions[$version]}
 
     # compile a list of supported languages for this version
+    support_version=$version
+    if [[ "$support_version" == 'latest' ]]; then
+        support_version=$most_stable_version
+    fi
+
     languages=('en')
-    for ref in $(ls -d $locale_dir/locale-$version/*/); do
+    for ref in $(ls -d $locale_dir/locale-$support_version/*/); do
         lang_dir=${ref%%/}
         lang=${lang_dir##*/}
 

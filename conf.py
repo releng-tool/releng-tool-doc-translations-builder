@@ -47,14 +47,13 @@ sys.path.insert(0, base_dir)
 from messages import *
 
 stable_text = STABLE_MSG.format(most_stable_version)
-stable_data = '<a href="https://docs.releng.io/{}/{}/">{}</a>'.format(
+stable_data = '<a href="https://docs.releng.io/{}/latest/">{}</a>'.format(
     language,
-    most_stable_version,
     stable_text
     )
 if version == 'master':
     html_context['version_warning'] = DEVELOPMENT_MSG + ' | ' + stable_data
-elif version != most_stable_version:
+elif version != most_stable_version and version != 'latest':
     html_context['version_warning'] = LEGACY_MSG + ' | ' + stable_data
 
 # localization options

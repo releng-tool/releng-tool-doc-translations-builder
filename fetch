@@ -34,6 +34,20 @@ echo 'ensuring most recent data from repositories...'
 git --git-dir="$base/$cache/$doc_container" fetch --all
 git --git-dir="$base/$cache/$locale_container" fetch --all
 
+# use most recent version
+git --git-dir="$base/$cache/$doc_container" for-each-ref \
+        --format="%(refname) %(upstream)" refs/heads | while read ref up; do
+    if [ -n "$up" ]; then
+        git --git-dir="$base/$cache/$doc_container" update-ref $ref $up
+    fi
+done
+git --git-dir="$base/$cache/$locale_container" for-each-ref \
+        --format="%(refname) %(upstream)" refs/heads | while read ref up; do
+    if [ -n "$up" ]; then
+        git --git-dir="$base/$cache/$locale_container" update-ref $ref $up
+    fi
+done
+
 # disable detached head message
 git --git-dir="$base/$cache/$doc_container" config advice.detachedHead false
 git --git-dir="$base/$cache/$locale_container" config advice.detachedHead false

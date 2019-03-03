@@ -20,6 +20,7 @@ set -e
 
 base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source $base/common
+source $base/settings
 if [ -z "$locale_dir" ]; then
     locale_dir=$base/$locale_container
 fi
@@ -64,6 +65,7 @@ for version in "${!versions[@]}"; do
         export RELENG_LANGUAGE=$lang
         export RELENG_LANGUAGES=$lang_list
         export RELENG_LOCALE_DIR=$locale_dir/locale-$version/
+        export RELENG_STABLE=$most_stable_version
         export RELENG_VERSION=$version
         export RELENG_VERSIONS=$ordered_versions
         sphinx-build \

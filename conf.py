@@ -6,12 +6,6 @@ from sphinx.util.pycompat import execfile_
 import os
 import sys
 
-# ##############################################################################
-
-most_stable_version = '0.1'
-
-# ##############################################################################
-
 base_dir = os.path.dirname(os.path.abspath(__file__))
 releng_tool_dir = os.path.join(base_dir, 'releng-tool')
 releng_tool_doc_dir = os.path.join(releng_tool_dir, 'Documentation')
@@ -36,6 +30,10 @@ version = os.environ['RELENG_VERSION']
 if 'RELENG_VERSIONS' not in os.environ:
     raise SyntaxError('supported versions not provided')
 html_context['versions'] = os.environ['RELENG_VERSIONS'].split(',')
+
+if 'RELENG_STABLE' not in os.environ:
+    raise SyntaxError('stable version not provided')
+most_stable_version = os.environ['RELENG_STABLE']
 
 if 'RELENG_LANGUAGE' not in os.environ:
     raise SyntaxError('language not provided')

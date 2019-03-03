@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Copyright 2019 releng-tool
+set -e
+
+# most stable version
+most_stable_version='0.1'

@@ -15,29 +15,27 @@ locale_repo=https://github.com/releng-tool/releng-tool-doc-translations.git
 base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source $base/common
 
-# clone repositories
-echo 'ensuring repositories exists...'
-[ ! -d "$base/$doc_container" ] && git \
-    clone $doc_repo $base/$doc_container
-[ ! -d "$base/$locale_container" ] && \
-    git clone $locale_repo $base/$locale_container
+# build repositories
+if [ ! -d "$base/$cache/$doc_container" ]; then
+    echo 'building repositories...'
+    git init --bare $base/$cache/$doc_container
+    git --git-dir="$base/$cache/$doc_container" \
+        remote add origin $doc_repo
+fi
+if [ ! -d "$base/$cache/$locale_container" ]; then
+    echo 'building repositories...'
+    git init --bare $base/$cache/$locale_container
+    git --git-dir="$base/$cache/$locale_container" \
+        remote add origin $locale_repo
+fi
 
 # fetch all from repositories
 echo 'ensuring most recent data from repositories...'
-git --git-dir="$base/$doc_container/.git" fetch --all
-git \
-    --git-dir="$base/$doc_container/.git" \
-    --work-tree="$base/$doc_container" \
-    pull --all
-
-git --git-dir="$base/$locale_container/.git" fetch --all
-git \
-    --git-dir="$base/$locale_container/.git" \
-    --work-tree="$base/$locale_container" \
-    pull --all
+git --git-dir="$base/$cache/$doc_container" fetch --all
+git --git-dir="$base/$cache/$locale_container" fetch --all
 
 # disable detached head message
-git --git-dir="$base/$doc_container/.git" config advice.detachedHead false
-git --git-dir="$base/$locale_container/.git" config advice.detachedHead false
+git --git-dir="$base/$cache/$doc_container" config advice.detachedHead false
+git --git-dir="$base/$cache/$locale_container" config advice.detachedHead false
 
 echo 'ready!'

@@ -21,11 +21,22 @@ set -e
 base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source $base/common
 source $base/settings
-if [ -z "$locale_dir" ]; then
-    locale_dir=$base/$locale_container
-fi
-source $locale_dir/settings
 out_dir=$base/_build
+
+# cleanup legacy working directory
+rm -rf $base/$workdir
+
+if [ -z "$locale_dir" ]; then
+    locale_dir=$base/$workdir/$locale_container
+
+    mkdir -p $locale_dir
+    git \
+        --git-dir="$base/$cache/$locale_container" \
+        --work-tree="$locale_dir" \
+        checkout master --force
+fi
+
+source $locale_dir/settings
 
 # ensure translations are up-to-date
 $base/support --generate-translation-objects
@@ -65,9 +76,10 @@ for version in "${!versions[@]}"; do
         echo -e "\e[7mbuilding $version ($lang)...\e[0m"
 
         # checkout specific documentation version
+        mkdir -p $base/$workdir/$doc_container
         git \
-            --git-dir="$base/$doc_container/.git" \
-            --work-tree="$base/$doc_container" \
+            --git-dir="$base/$cache/$doc_container" \
+            --work-tree="$base/$workdir/$doc_container" \
             checkout $reference --force
 
         # build documentation

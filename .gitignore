@@ -1,9 +1,9 @@
 # built documentation
 _build/*
 
-# external repositories
-releng-tool/
-translations/
+# cache and working-directory containers
+.releng_cache/
+.releng_work/
 
 # gettext generated mo files
 locale**/**/*.mo

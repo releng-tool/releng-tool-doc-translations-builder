@@ -22,6 +22,9 @@ templates_path = [
     os.path.join(base_dir, '_templates/'),
 ]
 
+html_static_path.append(os.path.join(base_dir, '_static/'))
+html_context['css_files'].append('_static/theme_overrides_global.css')
+
 # version/language information
 if 'RELENG_VERSION' not in os.environ:
     raise SyntaxError('version not provided')

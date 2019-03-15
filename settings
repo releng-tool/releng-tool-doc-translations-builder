@@ -3,4 +3,4 @@
 set -e
 
 # most stable version
-most_stable_version='0.1'
+most_stable_version='0.2'

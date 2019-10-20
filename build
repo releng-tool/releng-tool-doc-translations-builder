@@ -90,7 +90,7 @@ for version in "${!versions[@]}"; do
         export RELENG_STABLE=$most_stable_version
         export RELENG_VERSION=$version
         export RELENG_VERSIONS=$ordered_versions
-        sphinx-build \
+        python -m sphinx \
             -Dlanguage=$lang \
             -b $builder \
             $base \

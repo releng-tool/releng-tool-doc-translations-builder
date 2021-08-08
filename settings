@@ -3,10 +3,11 @@
 set -e
 
 # most stable version
-most_stable_version='0.6'
+most_stable_version='0.7'
 
 # displayed versions (ordered)
 ordered_versions=(
+'0.7',\
 '0.6',\
 '0.5',\
 '0.4'

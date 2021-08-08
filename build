@@ -14,7 +14,7 @@ done
 
 # find absolute path to locale directory (if provided and exists)
 if [ -n "$locale_dir" ]; then
-    echo "$(cd "$(dirname "$locale_dir")"; pwd -P)/$(basename "$locale_dir")"
+    locale_dir="$(cd "$(dirname "$locale_dir")"; pwd -P)/$(basename "$locale_dir")"
 fi
 
 set -e

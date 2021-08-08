@@ -54,7 +54,7 @@ stable_data = '<a href="https://docs.releng.io/{}/latest/">{}</a>'.format(
     language,
     stable_text
     )
-if version == 'master':
+if version == 'development':
     html_context['version_warning'] = DEVELOPMENT_MSG + ' | ' + stable_data
 elif version != most_stable_version and version != 'latest':
     html_context['version_warning'] = LEGACY_MSG + ' | ' + stable_data

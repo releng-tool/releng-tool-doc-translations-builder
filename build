@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Copyright 2019 releng-tool
+# Copyright 2019-2021 releng-tool
+set -e
 
 while [ "$#" -gt 0 ]; do
     case $1 in

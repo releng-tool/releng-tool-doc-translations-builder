@@ -7,7 +7,11 @@ import os
 import sys
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-releng_tool_dir = os.path.join(base_dir, '.releng_work', 'releng-tool')
+
+if 'RELENG_TARGET_DIR' not in os.environ:
+    raise SyntaxError('target directory not provided')
+
+releng_tool_dir = os.path.abspath(os.environ['RELENG_TARGET_DIR'])
 releng_tool_doc_dir = os.path.join(releng_tool_dir, 'Documentation')
 
 # inject releng-tool into system path to allow autodocs content to render

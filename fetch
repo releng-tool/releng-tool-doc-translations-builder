@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2019 releng-tool
+# Copyright 2019-2021 releng-tool
 set -e
 
 ################################################################################
@@ -12,44 +12,80 @@ locale_repo=https://github.com/releng-tool/releng-tool-doc-translations.git
 
 ################################################################################
 
+help=0
+while [ "$#" -gt 0 ]; do
+    case $1 in
+        --help)
+        help=1
+        break 2
+        ;;
+        --doc-repo)
+        doc_repo="$2"
+        shift
+        ;;
+        --locale-repo)
+        locale_repo="$2"
+        shift
+        ;;
+    esac
+    shift
+done
+
+if [ $help -eq 1 ]; then
+    cat << HELP_EOM
+fetch <options>
+
+ -h, --help                show this help
+ --doc-repo <repo>         the repository to fetch documentation from
+ --locale-repo <repo>      the repository to fetch locale data from
+HELP_EOM
+    exit 0
+fi
+
+################################################################################
+
 base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source $base/common
+
+GIT_DOC="git --git-dir=$base/$cache/$doc_container"
+GIT_LOCALE="git --git-dir=$base/$cache/$locale_container"
 
 # build repositories
 if [ ! -d "$base/$cache/$doc_container" ]; then
     echo 'building repositories...'
     git init --bare $base/$cache/$doc_container
-    git --git-dir="$base/$cache/$doc_container" \
-        remote add origin $doc_repo
 fi
+$GIT_DOC remote add origin $doc_repo 2>/dev/null || true
+$GIT_DOC remote set-url origin $doc_repo
+
 if [ ! -d "$base/$cache/$locale_container" ]; then
     echo 'building repositories...'
     git init --bare $base/$cache/$locale_container
-    git --git-dir="$base/$cache/$locale_container" \
-        remote add origin $locale_repo
 fi
+$GIT_LOCALE remote add origin $locale_repo 2>/dev/null || true
+$GIT_LOCALE remote set-url origin $locale_repo
 
 # fetch all from repositories
 echo 'ensuring most recent data from repositories...'
-git --git-dir="$base/$cache/$doc_container" fetch --all
-git --git-dir="$base/$cache/$locale_container" fetch --all
+$GIT_DOC fetch --all
+$GIT_LOCALE fetch --all
 
 # use most recent version
-git --git-dir="$base/$cache/$doc_container" for-each-ref \
+$GIT_DOC for-each-ref \
         --format="%(refname) %(upstream)" refs/heads | while read ref up; do
     if [ -n "$up" ]; then
-        git --git-dir="$base/$cache/$doc_container" update-ref $ref $up
+        $GIT_DOC update-ref $ref $up
     fi
 done
-git --git-dir="$base/$cache/$locale_container" for-each-ref \
+$GIT_LOCALE for-each-ref \
         --format="%(refname) %(upstream)" refs/heads | while read ref up; do
     if [ -n "$up" ]; then
-        git --git-dir="$base/$cache/$locale_container" update-ref $ref $up
+        $GIT_LOCALE update-ref $ref $up
     fi
 done
 
 # disable detached head message
-git --git-dir="$base/$cache/$doc_container" config advice.detachedHead false
-git --git-dir="$base/$cache/$locale_container" config advice.detachedHead false
+$GIT_DOC config advice.detachedHead false
+$GIT_LOCALE config advice.detachedHead false
 
 echo 'ready!'

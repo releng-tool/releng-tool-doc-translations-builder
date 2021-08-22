@@ -2,22 +2,46 @@
 # Copyright 2019-2021 releng-tool
 set -e
 
+################################################################################
+
+help=0
+locale_dir=
+target=
 while [ "$#" -gt 0 ]; do
     case $1 in
-        -L|--locale)
+        --help)
+        help=1
+        break 2
+        ;;
+        --locale|-L)
         locale_dir="$2"
+        shift
+        ;;
+        --version)
+        target="$2"
         shift
         ;;
     esac
     shift
 done
 
+if [ $help -eq 1 ]; then
+    cat << HELP_EOM
+fetch <options>
+
+ -h, --help                show this help
+ -L, --locale <dir>        the directory to fetch locale data from
+ --version <version>       build only a specific version
+HELP_EOM
+    exit 0
+fi
+
+################################################################################
+
 # find absolute path to locale directory (if provided and exists)
 if [ -n "$locale_dir" ]; then
     locale_dir="$(cd "$(dirname "$locale_dir")"; pwd -P)/$(basename "$locale_dir")"
 fi
-
-set -e
 
 base="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source $base/common
@@ -48,6 +72,13 @@ versions+=(['latest']=${versions[$most_stable_version]})
 ordered_versions="latest,$ordered_versions"
 
 for version in "${!versions[@]}"; do
+    # skip version if not matching to the target (if set)
+    if [ -n "$target" ]; then
+        if [ "$version" != "$target" ]; then
+            continue
+        fi
+    fi
+
     reference=${versions[$version]}
 
     # compile a list of supported languages for this version

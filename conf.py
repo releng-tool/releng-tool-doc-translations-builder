@@ -27,7 +27,6 @@ templates_path = [
 ]
 
 html_static_path.append(os.path.join(base_dir, '_static/'))
-html_context['css_files'].append('_static/theme_overrides_global.css')
 
 # version/language information
 if 'RELENG_VERSION' not in os.environ:
@@ -79,3 +78,5 @@ def setup(app):
     # point application documentation to releng-tool's set
     app.confdir = releng_tool_doc_dir
     app.srcdir = releng_tool_doc_dir
+
+    app.add_css_file('theme_overrides_global.css')

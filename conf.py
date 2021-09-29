@@ -27,6 +27,10 @@ templates_path = [
 ]
 
 html_static_path.append(os.path.join(base_dir, '_static/'))
+try:
+    html_context
+except NameError:
+    html_context = {}
 
 # version/language information
 if 'RELENG_VERSION' not in os.environ:

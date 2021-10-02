@@ -86,12 +86,17 @@ html_show_copyright = False
 html_show_sphinx = True
 
 def setup(app):
+    theme_override = 'theme_overrides_global.css'
+
     # invoke releng-tool's documentation setup
     if releng_tool_setup:
         releng_tool_setup(app)
 
+        # inject additional theme overrides
+        app.add_css_file(theme_override)
+    else:
+        html_context['css_files'].append('_static/' + theme_override)
+
     # point application documentation to releng-tool's set
     app.confdir = releng_tool_doc_dir
     app.srcdir = releng_tool_doc_dir
-
-    app.add_css_file('theme_overrides_global.css')

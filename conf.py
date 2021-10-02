@@ -18,7 +18,14 @@ releng_tool_doc_dir = os.path.join(releng_tool_dir, 'Documentation')
 sys.path.insert(0, releng_tool_dir)
 
 # load releng-tool's sphinx configuration
-execfile_(os.path.join(releng_tool_doc_dir, 'conf.py'), globals())
+releng_tool_conf = os.path.join(releng_tool_doc_dir, 'conf.py')
+with open(releng_tool_conf, 'rb') as source_file:
+    code = compile(source_file.read(), releng_tool_conf, 'exec')
+exec(code, globals(), locals())
+try:
+    releng_tool_setup = setup
+except NameError:
+    releng_tool_setup = None
 
 # theme overrides
 templates_path = [
@@ -79,6 +86,10 @@ html_show_copyright = False
 html_show_sphinx = True
 
 def setup(app):
+    # invoke releng-tool's documentation setup
+    if releng_tool_setup:
+        releng_tool_setup(app)
+
     # point application documentation to releng-tool's set
     app.confdir = releng_tool_doc_dir
     app.srcdir = releng_tool_doc_dir

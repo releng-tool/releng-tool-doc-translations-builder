@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+
+[releng-tool-doc-translations-builder.releng-tool-docbuilder-pot]
+file_filter = <lang>/LC_MESSAGES/releng-tool-docbuilder.po
+minimum_perc = 0
+source_file = releng-tool-docbuilder.pot
+source_lang = en
+type = PO
+

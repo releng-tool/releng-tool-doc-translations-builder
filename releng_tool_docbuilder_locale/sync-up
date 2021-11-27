@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Copyright 2021 releng-tool
+set -e
+
+locale_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+pushd $locale_dir >/dev/null
+
+python -m txclib push -s -t "$@"
+
+popd >/dev/null

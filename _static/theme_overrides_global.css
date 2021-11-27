@@ -1,21 +1,79 @@
-﻿.version-warning {
-    background-image: repeating-linear-gradient(-45deg,
-        transparent,
-        transparent 10px,
-        #5b5206 10px,
-        #5b5206 20px);
-    box-sizing: border-box;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    padding: 8px 20px 8px;
+﻿/* document version/language switch */
+#doc-versions {
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-sidebar-background-border);
+    bottom: 30px;
+    max-width: 220px;
+    overflow: hidden;
+    position: fixed;
+    right: 30px;
     text-align: center;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    width: 100%;
+    z-index: 100;
 }
 
-.version-warning a {
-    display: inline;
-    padding: 0px;
+#doc-versions dl {
+    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+#doc-versions dd {
+    display: inline-block;
+    margin: 0;
+    margin-top: 5px;
+}
+
+#doc-versions-banner {
+    color: #14984c;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+    background: var(--color-background-secondary);
+}
+
+body[data-theme="dark"] #doc-versions-banner {
+    color: #6ab825;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"])  #doc-versions-banner {
+        color: #6ab825;
+    }
+}
+
+.doc-versions-active .doc-versions-details {
+    color: #14984c;
+    display: block;
+}
+
+.doc-versions-details dl dt {
+    color: var(--color-foreground-primary) !important;
+    font-weight: bold;
+}
+
+.doc-versions-details dl dd {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.doc-versions-details {
+    display: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.doc-versions-special {
+    display: block !important;
+}
+
+/* explicit logo width */
+.sidebar-logo {
+    width: 50px;
+}
+
+/* styling injected external links on sidebar */
+.injected-sidebar-tree-spacer  {
+    border: none;
+    border-bottom: 1px solid var(--color-sidebar-search-border);
 }

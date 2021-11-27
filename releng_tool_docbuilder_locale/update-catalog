@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Copyright 2021 releng-tool
+set -e
+
+locale_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+base_dir="$(cd "$locale_dir/.." >/dev/null 2>&1 && pwd)"
+container=${locale_dir##*/}
+domain=releng-tool-docbuilder
+
+echo "updating locale catalog..."
+
+pushd $base_dir >/dev/null
+
+python -m babel.messages.frontend extract \
+    --mapping-file=$container/babel.cfg \
+    --no-default-keywords --keywords="L" \
+    --output-file=$container/$domain.pot \
+    .
+
+python -m babel.messages.frontend update \
+    --domain=$domain \
+    --input-file=$container/$domain.pot \
+    --output-dir=$container
+
+popd >/dev/null

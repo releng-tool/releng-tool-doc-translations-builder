@@ -1,0 +1,28 @@
+{% extends "!page.html" %}
+
+{% block body %}
+
+{{ super() }}
+
+<div id="doc-versions">
+    <div id="doc-versions-banner">🕮 {% if version[0].isdigit() %}v{% endif %}{{ version_str }}</div>
+    <div class="doc-versions-details">
+        <dl>
+            <dt>{{ L('Languages') }}</dt>
+{% for val in languages %}
+            <dd><a href="https://docs.releng.io/{{ val }}/{{ version }}/">{{ val }}</a></dd>
+{% endfor %}
+        </dl>
+        <dl class="doc-versions-entries">
+            <dt>{{ L('Versions') }}</dt>
+            <dd class="doc-versions-special"><a href="https://docs.releng.io/{{ language }}/latest/">{{ L('Latest') }}</a></dd>
+{% for val in versions %}
+            <dd><a href="https://docs.releng.io/{{ language }}/{{ val }}/">{{ val }}</a></dd>
+{% endfor %}
+            <dd class="doc-versions-special"><a href="https://docs.releng.io/{{ language }}/development/">{{ L('Development') }}</a></dd>
+        </dl>
+    </div>
+</div>
+<noscript><style>#doc-versions { display:none; }</style></noscript>
+
+{% endblock %}

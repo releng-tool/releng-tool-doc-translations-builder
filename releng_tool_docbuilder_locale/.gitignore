@@ -1,0 +1,5 @@
+# gettext generated mo files
+**/*.mo
+
+# fuzzy files
+**/*.po~

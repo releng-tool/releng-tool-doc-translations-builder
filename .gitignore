@@ -5,9 +5,6 @@ _build/*
 .releng_cache/
 .releng_work/
 
-# gettext generated mo files
-locale**/**/*.mo
-
 # python-specific
 __pycache__/
 *.py[cod]

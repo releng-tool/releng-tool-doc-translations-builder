@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Copyright 2021 releng-tool
+set -e
+
+locale_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+base_dir="$(cd "$locale_dir/.." >/dev/null 2>&1 && pwd)"
+
+echo "compiling locale catalog..."
+
+pushd $base_dir >/dev/null
+
+python -m babel.messages.frontend compile \
+    --domain=releng-tool-docbuilder \
+    --directory=releng_tool_docbuilder_locale \
+    --use-fuzzy
+
+popd >/dev/null

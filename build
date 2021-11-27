@@ -144,6 +144,7 @@ for version in "${!versions[@]}"; do
             -Dlanguage=$lang \
             -b $builder \
             $base \
-            $lang_target_dir
+            $lang_target_dir \
+            -E -a -W
     done
 done

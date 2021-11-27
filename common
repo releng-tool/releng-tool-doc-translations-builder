@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2019 releng-tool
+# Copyright 2019-2021 releng-tool
 set -e
 
 # cache base directory for git sources

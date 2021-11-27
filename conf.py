@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright 2019 releng-tool
+# Copyright 2019-2021 releng-tool
 
 from releng_tool_docbuilder_locale import L
 from releng_tool_docbuilder_locale import add_translation_to_context

@@ -15,4 +15,4 @@ doc_container=releng-tool
 locale_container=translations
 
 # sphinx builder to invoke
-builder=html
+builder=dirhtml

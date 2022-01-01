@@ -91,6 +91,15 @@ for version in "${!versions[@]}"; do
         fi
     fi
 
+    # use legacy builder for older versions (to preserve older links)
+    minor=${version##*.}
+    version_builder=$builder
+    if [ -n "${minor##*[!0-9]*}" ]; then
+        if [ $minor -lt 10 ]; then
+            version_builder=html
+        fi
+    fi
+
     reference=${versions[$version]}
 
     # compile a list of supported languages for this version
@@ -141,7 +150,7 @@ for version in "${!versions[@]}"; do
         export RELENG_VERSIONS=$ordered_versions
         python -m sphinx \
             -Dlanguage=$lang \
-            -b $builder \
+            -b $version_builder \
             $base \
             $lang_target_dir \
             -E -a -W

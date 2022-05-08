@@ -109,8 +109,9 @@ for version in "${!versions[@]}"; do
     fi
 
     languages=('en')
-    for ref in $(ls -d $locale_dir/locale-$support_version/*/); do
-        lang_dir=${ref%%/}
+    for ref in $(ls -d $locale_dir/locale-$support_version/*/LC_MESSAGES); do
+        lang_dir=${ref%/*}
+        lang_dir=${lang_dir%%/}
         lang=${lang_dir##*/}
 
         # skip pot directory

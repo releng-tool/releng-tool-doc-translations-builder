@@ -72,7 +72,7 @@ if [ -z "$locale_dir" ]; then
     git \
         --git-dir="$base/$cache/$locale_container" \
         --work-tree="$locale_dir" \
-        checkout master --force
+        checkout main --force
 fi
 
 source $locale_dir/settings

@@ -45,6 +45,7 @@ if not legacy_theme:
     ]
 
     html_js_files = [
+        'jquery-3.6.3.slim.min.js',
         'theme_overrides_global.js',
     ]
 
